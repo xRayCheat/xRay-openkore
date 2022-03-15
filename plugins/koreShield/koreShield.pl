@@ -38,7 +38,7 @@ sub new {
    	my $couter = 10;
 	
 	while($couter > 0){
-		warning decode("UTF-8","เจอ GM หยุดบอท จะทำงานอีกภายใน .....").$couter." \n";
+		warning decode("UTF-8","Found GM, Bot will go to work in.....").$couter." \n";
 		
 
 		$couter--;
@@ -114,7 +114,7 @@ sub commandHandler {
 	### parameter: Stop command
 	if ($arg eq 'go') {
 		if ($net->getState() eq Network::IN_GAME()) {
-			warning decode("UTF-8","############## Let IT GO! เริ่มกระบวนการ บอทอัตโนมัติ โดยทันที  ขอให้โชคดี  ###########\n");
+			warning decode("UTF-8","############## Let IT GO! Go to Work!  ###########\n");
 			if($BotSleepCouter > 5){
 				$BotSleepCouter = 5;
 			}
@@ -364,8 +364,8 @@ sub Alarm_me {
 		#message "Now $now !!!! Stop $stop \n";
 		if($now eq $stop || ($now eq $maintenant_time && $maintenant_day eq $wday)){
 			#Action after alarm
-			warning decode("UTF-8"," >>>>>>>>>>>>>>>> คำเตือน เวลาปลุกทำงาน <<<<<<<<<<<<<<<<  \n");
-			error decode("UTF-8"," >>>>>>>>>>>>>>>> ขณะนี้เวลา  $now <<<<<<<<<<<<<<<<  \n");
+			warning decode("UTF-8"," >>>>>>>>>>>>>>>> Warning Wake time <<<<<<<<<<<<<<<<  \n");
+			error decode("UTF-8"," >>>>>>>>>>>>>>>> now  $now <<<<<<<<<<<<<<<<  \n");
 			alarm_task();
 		}
 	}
@@ -872,7 +872,7 @@ sub ping_checkIds {
 	######################### Taking rest ###############
 	if(time > $RestingTimeout && $BotSleepCouter > 0 && $ReportCount > 0){		
 		$RestingTimeout = time + 1;
-		warning decode("UTF-8","Bot กำลังจำศีล หลบ GM อยู่ จะออกไปทำงานอีกครั้ง ภายในเวลา....  ").$BotSleepCouter.decode("UTF-8"," วินาที \n");
+		warning decode("UTF-8","Found GM, Bot will back to work in....  ").$BotSleepCouter.decode("UTF-8"," sec. \n");
 		Commands::run("ai off");
 		$BotSleepCouter--;
 		
