@@ -1,0 +1,49 @@
+# http://ro.gnjoy.in.th/
+[Thailand - tRO: Chaos, Thor, Iris]
+ip thro-acc1.gnjoy.in.th
+port 50001
+master_version 7
+version 24
+serverType tRO
+serverEncoding Thai
+addTableFolders tRO
+charBlockSize 175
+gameGuard 0
+charDeleteDateType 1
+blockingPlayerCancel 1
+rankingSystemType 1
+itemListType 1
+pinCode 1
+
+# http://roc.gnjoy.in.th/
+[Thailand - tRO Classic]
+ip thro-acc1.gnjoy.in.th
+port 50001
+master_version 7
+version 24
+serverType tRO
+serverEncoding Thai
+addTableFolders tRO/classic;tRO
+charBlockSize 175
+gameGuard 0
+charDeleteDateType 1
+blockingPlayerCancel 1
+rankingSystemType 1
+itemListType 1
+pinCode 1
+
+[aRO - baphomet]
+ip 18.136.20.146
+port 6900
+master_version 0
+version 15
+serverType aRO
+serverEncoding Western
+addTableFolders aRO
+charBlockSize 175
+charDeleteDateType 1
+blockingPlayerCancel 1
+rankingSystemType 1
+itemListType 1
+pinCode 1
+ignoreAntiCheatWarning 0
