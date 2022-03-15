@@ -860,7 +860,7 @@ storageAuto_standpoint
 storageAuto_distance 10
 storageAuto_maxDistance
 storageAuto_npc_type 3
-storageAuto_npc_steps c r1 c r0 n
+storageAuto_npc_steps c c r1 c r0 n
 storageAuto_password
 storageAuto_keepOpen 0
 storageAuto_useChatCommand
