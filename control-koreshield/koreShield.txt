@@ -16,7 +16,7 @@ disable_core 0
 ignore_detected_ping 1
 silent
 pingGMpp 1
-ping_checkDelay 0.5
+ping_checkDelay 3
 ping_inLockOnly 0
 ping_notInExcludeMap 0
 ping_notWhileQueued macro NPC
