@@ -449,15 +449,14 @@ sub createMenuBar {
 	$menu->Append($opMenu, T('P&rogram'));
 	
 	#Xray Option *Network::Receive::character_name = *Prontera::character_name;
-	my $XraysopMenu = new Wx::Menu;
-	$self->{mManual} = $self->addMenu($XraysopMenu, T('&'.decode("UTF-8","KS: ปิด / เปิด ป้องกัน GM")), \&disable_KS, T(decode("UTF-8"," ระวัง คุณได้ปิดระบบ ป้องกัน GM")));
-	$self->addMenu($XraysopMenu, T('&'.decode("UTF-8","KS: เลิก จำศีล")), \&bot_go, T(decode("UTF-8"," ไปเลย กลัวที่ใหนล่ะ")));
-	$self->{mManual} = $self->addMenu($XraysopMenu, T('&'.decode("UTF-8","KS: ทดสอบ ระบบจำศีล")), \&bot_testResting, T(decode("UTF-8"," ทดสอบ ตัว ต้องอยู่ที่ lockMap เท่านั้น")));
-	$self->{mManual} = $self->addMenu($XraysopMenu, T('&'.decode("UTF-8","SRC: ปิด / เปิด เก็บของเร็ว")), \&disable_fast_take_item, T(decode("UTF-8"," ปิดการเก็บของเร็วเกินไป")));
-	$self->addMenu($XraysopMenu, T('&'.decode("UTF-8","SRC > ปิด / เปิด แจม !!")), \&steal_kill_funny, T(decode("UTF-8"," ไม่มีแจม")));
-	$self->addMenu($XraysopMenu, T('&'.decode("UTF-8","Alarm Clock > ปิด / เปิด ")), \&disable_alarm, T(decode("UTF-8","ปิด เปิด การตั้งเวลา")));
-	$XraysopMenu->AppendSeparator;
-	$menu->Append($XraysopMenu, T('X&rays Option'));
+	my $xRaysopMenu = new Wx::Menu;
+	$self->{mManual} = $self->addMenu($xRaysopMenu, T('&'.decode("UTF-8","KoreS: on / off koreshield")), \&disable_KS, T(decode("UTF-8"," You have disabled GM protection")));
+	$self->addMenu($xRaysopMenu, T('&'.decode("UTF-8","KoreS: Let'GO !!")), \&bot_go, T(decode("UTF-8"," Let Bot GO !!")));
+	$self->{mManual} = $self->addMenu($xRaysopMenu, T('&'.decode("UTF-8","KoreS: Test koreshield ")), \&bot_testResting, T(decode("UTF-8"," Stay in lockMap Only")));
+	$self->{mManual} = $self->addMenu($xRaysopMenu, T('&'.decode("UTF-8","SRC: on / off fast loot item")), \&disable_fast_take_item, T(decode("UTF-8"," turn off fast loot item")));
+	$self->addMenu($xRaysopMenu, T('&'.decode("UTF-8","Alarm Clock > on / off ")), \&disable_alarm, T(decode("UTF-8","on / off Alarm Clock")));
+	$xRaysopMenu->AppendSeparator;
+	$menu->Append($xRaysopMenu, T('x&Rays Option'));
 	
 	# Info menu
 	my $infoMenu = new Wx::Menu;
@@ -1012,30 +1011,30 @@ sub disable_KS {
 sub bot_go {
 	my $self = shift;
 	Utils::Win32::playSound ('C:\Windows\Media\Windows Battery Low.wav');
-	Log::warning (decode("UTF-8"," ไปเลย กลัวที่่ใหนล่ะ \n"));
+	#Log::warning (decode("UTF-8"," ไปเลย กลัวที่่ใหนล่ะ \n"));
 	Commands::run("bot go");
 	return;
 }
 sub bot_testResting {
 	my $self = shift;
 	Utils::Win32::playSound ('C:\Windows\Media\Windows Battery Low.wav');
-	Log::warning (decode("UTF-8"," ทดสอบระบบ ป้องกัน GM \n"));
+	Log::warning (decode("UTF-8"," Test koreshield \n"));
 	Commands::run("bot RestTesting");
 	return;
 }
 sub disable_fast_take_item {
 	my $self = shift;
 	Utils::Win32::playSound ('C:\Windows\Media\Windows Battery Low.wav');
-	Log::warning (decode("UTF-8",">>>> การเก็บของเร็วเกินมนุษย์  <<<\n"));
+	#Log::warning (decode("UTF-8",">>>> การเก็บของเร็วเกินมนุษย์  <<<\n"));
 	
 	if($config{fast_take_item} eq 0){
 		main::configModify('fast_take_item',1, 2);
-		Log::error (decode("UTF-8"," ระวัง เปิดระบบ เก็บของเร็วเว่อ \n"));
-		Log::error (decode("UTF-8"," ระวัง เปิดระบบ เก็บของเร็วเว่อ \n"));
+		Log::error (decode("UTF-8"," fast_take_item enable \n"));
+		Log::error (decode("UTF-8"," fast_take_item enable \n"));
 	}else {
 		main::configModify('fast_take_item',0, 2);
-		Log::message (decode("UTF-8"," ปิด ระบบ เก็บของเร็ว เหมือนคนแล้ว ค่ะ \n"));
-		Log::message (decode("UTF-8"," ปิด ระบบ เก็บของเร็ว เหมือนคนแล้ว ค่ะ \n"));				
+		Log::message (decode("UTF-8"," fast_take_item disable \n"));
+		Log::message (decode("UTF-8"," fast_take_item disable \n"));				
 	}
 	return;	
 }
@@ -1050,21 +1049,16 @@ sub Creat_fast_take_config {
 	}
 }
 ################ End external sub Creat_fast_take_config ###########
-sub steal_kill_funny {
-	Log::message (decode("UTF-8","ไม่่่มีจ้า ล้อเล่น 5555\n"));
-}
 
 sub disable_alarm {
 	my $self = shift;
 	Utils::Win32::playSound ('C:\Windows\Media\Windows Battery Low.wav');	
 	if($config{alarm_disable} eq 0){
 		main::configModify('alarm_disable',1, 2);
-		Log::message (decode("UTF-8"," เปิด การตั้งเวลาเตือน ค่ะ \n"));
-		Log::message (decode("UTF-8"," เปิด การตั้งเวลาเตือน ค่ะ \n"));
+		Log::message (decode("UTF-8"," enable alarm  \n"));
 	}else {
 		main::configModify('alarm_disable',0, 2);
-		Log::message (decode("UTF-8"," ปิด การตั้งเวลาเตือน ค่ะ \n"));
-		Log::message (decode("UTF-8"," ปิด การตั้งเวลาเตือน ค่ะ \n"));				
+		Log::message (decode("UTF-8"," disable alarm \n"));
 	}
 	return;	
 }

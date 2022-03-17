@@ -107,7 +107,7 @@ sub commandHandler {
 		
 	if (!defined $_[1] || $miss_msg != 'go') {
 		warning decode("UTF-8","คำสั่งนี้ให้บอท ยกเลิกการจำศีล \n").
-		decode("UTF-8","ไม่มีคำสั่งอะไรอื่นเลย  ต้องพิมพ์   bot go  จัดทำโดย Poring\n");
+		#decode("UTF-8","ไม่มีคำสั่งอะไรอื่นเลย  ต้องพิมพ์   bot go  จัดทำโดย Poring\n");
 		return
 	}
 	my ($arg, @params) = split(/\s+/, $_[1]);
@@ -119,27 +119,27 @@ sub commandHandler {
 				$BotSleepCouter = 5;
 			}
 		}else {
-			warning decode("UTF-8",">>>> ท่านต้อง Login game ก่อนดิ  <<<<\n");
+			warning decode("UTF-8",">>>> You Must Login Game frist  <<<<\n");
 		}
 	}
 	if ($arg eq 'RestTesting') {
 		if ($net->getState() eq Network::IN_GAME() && $field->name eq $config{lockMap}) {
-			warning decode("UTF-8","############## Bot Resting ทดสอบการ จำศีล  ###########\n");
+			warning decode("UTF-8","############## Test koreshield  ###########\n");
 			$ReportCount = 9;
 			&core_eventsReaction('direct_call');
 		}else {
-			warning decode("UTF-8",">>>> ต้องอยู่ในเกม และ ใน lockMap ของ config.txt <<<<\n");
+			warning decode("UTF-8",">>>> Stay in lockMap Only  <<<<\n");
 		}
 	}
 	if ($arg eq 'ks-disable'){
 		if($config{koreShield} eq 0){
 			main::configModify('koreShield',1, 2);
-			message (decode("UTF-8"," เปิดระบบ ป้องกัน GM \n"));
-			message (decode("UTF-8"," เปิดระบบ ป้องกัน GM \n"));
+			warning (decode("UTF-8"," enable GM protection \n"));
+			warning (decode("UTF-8"," enable GM protection \n"));
 		}else {
 			main::configModify('koreShield',0, 2);
-			error (decode("UTF-8"," ระวัง คุณได้ปิดระบบ ป้องกัน GM \n"));
-			error (decode("UTF-8"," ระวัง คุณได้ปิดระบบ ป้องกัน GM \n"));				
+			error (decode("UTF-8"," You have disabled GM protection \n"));
+			error (decode("UTF-8"," You have disabled GM protection \n"));				
 		}
 		
 	}
