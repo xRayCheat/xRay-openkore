@@ -948,6 +948,7 @@ sub ping_checkIds {
 		if ($ping_testMap ne $core_map) {
 			message("Changed our maps, reseting GM ID list position... \n", "ping", 0);
 			$ping_idArrayPosition = 0;
+			$ping_nextCheck = time + 5;
 		}
 	}
 }
