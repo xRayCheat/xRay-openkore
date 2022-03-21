@@ -92,7 +92,7 @@ sub SellBeforeBuy{
 sub OrderTeleportItem {
 	if ($net->getState() eq Network::IN_GAME()) {
 		#-------------------------------- Default item order here -----------------------
-		my $default_Item1_order = "[Not For Sale] Novice Fly Wing,Novice Fly Wing,Beginner Fly Wing,Fly Wing";
+		my $default_Item1_order = "Unlimited Wing Of Fly,[Not For Sale] Novice Fly Wing,Novice Fly Wing,Beginner Fly Wing,Fly Wing";
 		my $default_Item2_order = "Novice Butterfly Wing,Butterfly Wing";
 		#--------------------------------------------------------------------------------
 		
