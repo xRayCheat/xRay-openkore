@@ -10,14 +10,13 @@
 #
 #  $Revision$
 #  $Id$
+#
 #  modified
 #  VampireBlood & Poring 
-#
 #########################################################################
 package Network::XKore;
 
 use strict;
-use Encode;
 use base qw(Exporter);
 use Exporter;
 use IO::Socket::INET;
@@ -35,8 +34,6 @@ use Utils qw(dataWaiting timeOut);
 use Translation;
 use Misc qw(chatLog);
 use Network::MessageTokenizer;
-use Data::Dumper;
-
 
 my $currentClientKey = 0;
 my $myPid;
@@ -47,10 +44,10 @@ my $myPid;
 # Initialize X-Kore mode. Throws Network::XKore::CannotStart on error.
 sub new {
 	my $class = shift;
-	
-	my $self = bless {}, $class;
 	autoPidPorts();
-	my $port = $myPid || $config{XKore_port} || 2350;
+	my $port = $config{XKore_port} || 2350;
+	my $self = bless {}, $class;
+
 	undef $@;
 	$self->{server} = new IO::Socket::INET->new(
 		Listen		=> 5,
@@ -74,52 +71,45 @@ sub new {
 	$self->{tokenizer} = new Network::MessageTokenizer($self->getRecvPackets());
 	$self->{kore_map_changed_hook} = Plugins::addHook('packet/map_changed', \&kore_map_changed, $self);
 
-	message T(decode("UTF-8","X-Kore mode start  \n")), "startup";
+	message T("X-Kore mode intialized.\n"), "startup";
 
 	return $self;
 }
-
 sub autoPidPorts{
 	my $pid;
 	my $loop = 1;
 	my @list;
-
-	message TF(decode("UTF-8","Selected pid (%s) ..... ")."\n", $config{XKore_exeName}), "startup";
+	message TF("Selected pid (%s) ..... \n", $config{XKore_exeName}), "startup";
 	Plugins::callHook('XKore_start');
 	while ($loop) {
 		undef @list;
 		my @z = Utils::Win32::listProcesses();
-
 		foreach (@z) {
 			if (lc($_->{'exe'}) eq lc($config{XKore_exeName})) {
 				push @list, {exe => $_->{'exe'}, pid => $_->{'pid'}};
 			}
 		}
-
 		if (@list == 0) {
 			# no process, wait for start
 			usleep 20000;
 			next;
 		}
-
 		# automatically attach if one process found and config allows it
 		if (@list == 1 && $config{XKore_autoAttachIfOneExe}) {
 			$pid = $list[0]->{'pid'};
 			$myPid = $pid;
 			#message TF(decode("UTF-8","Ragnarok Process ID ")." = %i\n", $pid), "startup";
-
 			$loop = 0;
 			last;
 		}
-
 		# several exes, make choice
 		my $qr;
 		my $i = 1;
 		foreach (@list) {
-			$qr = $qr . TF(decode("UTF-8","")."[%i] PID = %i (%s)\n", $i, $_->{'pid'}, $_->{'exe'});
+			$qr = $qr . TF("[%i] PID = %i (%s)\n", $i, $_->{'pid'}, $_->{'exe'});
 			$i++;
 		}
-		my $input = $interface->query($qr, title => decode("UTF-8",""));
+		my $input = $interface->query($qr, title => "");
 		if ($input eq "quit") {
 			$quit = 1;
 			$loop = 0;
@@ -128,17 +118,17 @@ sub autoPidPorts{
 			next;
 		} else {
 			if ($input < 1 || $input > @list) {
-				error TF(decode("UTF-8",".... ")."1 ".decode("UTF-8"," - ")." %i\n", @list - 0);
+				error TF(".... 1 - %i\n", @list - 0);
 					next;
 			}
 			$pid = $list[$input - 1]->{'pid'};
 			$myPid = $pid;
-			message TF(decode("UTF-8","  ")." = %i\n", $pid), "startup";
+			message TF("  = %i\n", $pid), "startup";
 			$loop = 0;
 			last;
 		}
 	}
-	warning decode("UTF-8","Port = PID ").$myPid." \n" ,"startup";
+	warning "Port = PID ".$myPid." \n" ,"startup";
 	main::configModify('XKore_port', $myPid, 1);
 	return if $quit;
 	
@@ -312,9 +302,6 @@ sub checkConnection {
 		$self->setState(Network::NOT_CONNECTED);
 		error T("Timeout on Map Server, "), "connection";
 		Plugins::callHook('disconnected');
-		#Sound for DC
-		Utils::Win32::playSound ('C:\Windows\Media\Windows Hardware Fail.wav');
-		
 		if ($config{dcOnDisconnect}) {
 			error T("Auto disconnecting on Disconnect!\n");
 			chatLog("k", T("*** You disconnected, auto disconnect! ***\n"));
@@ -401,7 +388,7 @@ sub checkConnection {
 			exit 1;
 		}
 	}
-	
+
 	# Patch client
 	$self->hackClient($pid) if ($config{XKore_bypassBotDetection});
 
@@ -544,17 +531,17 @@ sub hackClient {
 	my $maxAddr = Utils::Win32::SystemInfo_MaxAppAddress();
 
 	my $patchFind = pack('C*', 0x66, 0xA3) . '....'	# mov word ptr [xxxx], ax
-		. pack('C*', 0xA0) . '....'					# mov al, byte ptr [xxxx]
-		. pack('C*', 0x3C, 0x0A,					# cmp al, 0A
-			0x66, 0x89, 0x0D) . '....';				# mov word ptr [xxxx], cx
+		. pack('C*', 0xA0) . '....'		# mov al, byte ptr [xxxx]
+		. pack('C*', 0x3C, 0x0A,		# cmp al, 0A
+			0x66, 0x89, 0x0D) . '....';	# mov word ptr [xxxx], cx
 
 	my $original = '\\' . pack('C*', 0x7C, 0x6D);	# jl 6D
-													# (to be replaced by)
-	my $patched = pack('C*', 0xEB, 0x6D);			# jmp 6D
+							# (to be replaced by)
+	my $patched = pack('C*', 0xEB, 0x6D);		# jmp 6D
 
-	my $patchFind2 = pack('C*', 0xA1) . '....'		# mov eax, dword ptr [xxxx]
-		. pack('C*', 0x8D, 0x4D, 0xF4,				# lea ecx, dword ptr [ebp+var_0C]
-			0x51);									# push ecx
+	my $patchFind2 = pack('C*', 0xA1) . '....'	# mov eax, dword ptr [xxxx]
+		. pack('C*', 0x8D, 0x4D, 0xF4,		# lea ecx, dword ptr [ebp+var_0C]
+			0x51);				# push ecx
 	
 	
 	$original = $patchFind . $original . $patchFind2;

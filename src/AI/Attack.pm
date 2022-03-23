@@ -413,7 +413,6 @@ sub main {
 		} else {
 			debug TF("%s no acceptable place to kite from (%d %d), mob at (%d %d).\n", $char, $realMyPos->{x}, $realMyPos->{y}, $realMonsterPos->{x}, $realMonsterPos->{y}), 'ai_attack';
 		}
-		
 	} elsif(!defined $args->{attackMethod}{type}) {
 		debug T("Can't determine a attackMethod (check attackUseWeapon and Skills blocks)\n"), "ai_attack";
 		$args->{ai_attack_failed_give_up}{timeout} = 6 if !$args->{ai_attack_failed_give_up}{timeout};
@@ -449,12 +448,11 @@ sub main {
 				meetingSubRoute => 1,
 				LOSSubRoute => 1
 			);
-
 			if (!$result) {
 				# Unable to calculate a route to target
 				$target->{attack_failed} = time;
 				AI::dequeue;
-				message T("Unable to calculate a route to target, dropping target\n"), "ai_attack";
+					message T("Unable to calculate a route to target, dropping target\n"), "ai_attack";
 				if ($config{'teleportAuto_dropTarget'}) {
 					message T("Teleport due to dropping attack target\n");
 					useTeleport(1);
@@ -471,7 +469,6 @@ sub main {
 				useTeleport(1);
 			}
 		}
-
 	} elsif (
 		# We are a ranged attacker in range without LOS
 		$args->{attackMethod}{maxDistance} > 1 &&
@@ -574,12 +571,15 @@ sub main {
 					AI::dequeue if (AI::action eq "attack");
 				}
 			}
-
 			my $slot = $args->{attackMethod}{skillSlot};
 			delete $args->{attackMethod};
 
 			$ai_v{"attackSkillSlot_${slot}_time"} = time;
 			$ai_v{"attackSkillSlot_${slot}_target_time"}{$ID} = time;
+
+			if($config{'attackMug'}){
+				$messageSender->sendAction($ID, 0);
+			}
 
 			ai_setSuspend(0);
 			my $skill = new Skill(auto => $config{"attackSkillSlot_$slot"});
@@ -596,6 +596,9 @@ sub main {
 			$args->{monsterID} = $ID;
 			my $skill_lvl = $config{"attackSkillSlot_${slot}_lvl"} || $char->getSkillLevel($skill);
 			debug "Auto-skill on monster ".getActorName($ID).": ".qq~$config{"attackSkillSlot_$slot"} (lvl $skill_lvl)\n~, "ai_attack";
+			if($config{'attackMug'}){
+				$messageSender->sendAction($ID, 7);
+			}
 
 		} elsif ($args->{attackMethod}{type} eq "combo") {
 			my $slot = $args->{attackMethod}{comboSlot};

@@ -64,7 +64,6 @@ use Commands;
 use Utils;
 use Translation qw/T TF/;
 use FileParsers;
-use Encode;
 
 our $CVS;
 our ($iterationTime, $updateUITime, $updateUITime2);
@@ -95,7 +94,7 @@ sub OnInit {
 		['mainLoop_pre',                        sub { $self->onUpdateUI(); }],
 		['captcha_file',                        sub { $self->onCaptcha(@_); }],
 		['packet/minimap_indicator',            sub { $self->onMapIndicator (@_); }],
-		['start3',                              sub { Creat_fast_take_config(); $interface->{mapViewer}->parsePortals(); }],
+		['start3',                              sub { $interface->{mapViewer}->parsePortals(); }],
 
 		# stat changes
 		['packet/map_changed',                  sub { $self->onSelfStatChange (@_); $self->onSlaveStatChange (@_); $self->onPetStatChange (@_); }],
@@ -447,17 +446,7 @@ sub createMenuBar {
 	}, T('Exit to the character selection screen'));
 	$self->addMenu($opMenu, T('E&xit') . "\tCtrl-W", \&quit, T('Exit this program'));
 	$menu->Append($opMenu, T('P&rogram'));
-	
-	#Xray Option *Network::Receive::character_name = *Prontera::character_name;
-	my $xRaysopMenu = new Wx::Menu;
-	$self->{mManual} = $self->addMenu($xRaysopMenu, T('&'.decode("UTF-8","KoreS: on / off koreshield")), \&disable_KS, T(decode("UTF-8"," You have disabled GM protection")));
-	$self->addMenu($xRaysopMenu, T('&'.decode("UTF-8","KoreS: Let'GO !!")), \&bot_go, T(decode("UTF-8"," Let Bot GO !!")));
-	$self->{mManual} = $self->addMenu($xRaysopMenu, T('&'.decode("UTF-8","KoreS: Test koreshield ")), \&bot_testResting, T(decode("UTF-8"," Stay in lockMap Only")));
-	$self->{mManual} = $self->addMenu($xRaysopMenu, T('&'.decode("UTF-8","SRC: on / off fast loot item")), \&disable_fast_take_item, T(decode("UTF-8"," turn off fast loot item")));
-	$self->addMenu($xRaysopMenu, T('&'.decode("UTF-8","Alarm Clock > on / off ")), \&disable_alarm, T(decode("UTF-8","on / off Alarm Clock")));
-	$xRaysopMenu->AppendSeparator;
-	$menu->Append($xRaysopMenu, T('x&Rays Option'));
-	
+
 	# Info menu
 	my $infoMenu = new Wx::Menu;
 	$self->addMenu($infoMenu, T('&Status').'	Alt-S',	sub { Commands::run("s"); });
@@ -1002,66 +991,7 @@ sub updateItemList {
 ##################
 ## Callbacks
 ##################
-sub disable_KS {
-	my $self = shift;
-	Commands::run("bot ks-disable");
-	Utils::Win32::playSound ('C:\Windows\Media\Windows Battery Low.wav');
-	return;
-}
-sub bot_go {
-	my $self = shift;
-	Utils::Win32::playSound ('C:\Windows\Media\Windows Battery Low.wav');
-	#Log::warning (decode("UTF-8"," ไปเลย กลัวที่่ใหนล่ะ \n"));
-	Commands::run("bot go");
-	return;
-}
-sub bot_testResting {
-	my $self = shift;
-	Utils::Win32::playSound ('C:\Windows\Media\Windows Battery Low.wav');
-	Log::warning (decode("UTF-8"," Test koreshield \n"));
-	Commands::run("bot RestTesting");
-	return;
-}
-sub disable_fast_take_item {
-	my $self = shift;
-	Utils::Win32::playSound ('C:\Windows\Media\Windows Battery Low.wav');
-	#Log::warning (decode("UTF-8",">>>> การเก็บของเร็วเกินมนุษย์  <<<\n"));
-	
-	if($config{fast_take_item} eq 0){
-		main::configModify('fast_take_item',1, 2);
-		Log::error (decode("UTF-8"," fast_take_item enable \n"));
-		Log::error (decode("UTF-8"," fast_take_item enable \n"));
-	}else {
-		main::configModify('fast_take_item',0, 2);
-		Log::message (decode("UTF-8"," fast_take_item disable \n"));
-		Log::message (decode("UTF-8"," fast_take_item disable \n"));				
-	}
-	return;	
-}
-################ external sub Creat_fast_take_config ###########
-sub Creat_fast_take_config {
-	if($config{fast_take_item} eq ""){
-		main::configModify('fast_take_item',0, 2);
-		Log::message "Created fast_take_item enable status \n";
-		Log::message "Default fast_take_item enable is  ".$config{fast_take_item}." \n";
-	}else {
-		Log::message "Default fast_take_item enable is  ".$config{fast_take_item}." \n";
-	}
-}
-################ End external sub Creat_fast_take_config ###########
 
-sub disable_alarm {
-	my $self = shift;
-	Utils::Win32::playSound ('C:\Windows\Media\Windows Battery Low.wav');	
-	if($config{alarm_disable} eq 0){
-		main::configModify('alarm_disable',1, 2);
-		Log::message (decode("UTF-8"," enable alarm  \n"));
-	}else {
-		main::configModify('alarm_disable',0, 2);
-		Log::message (decode("UTF-8"," disable alarm \n"));
-	}
-	return;	
-}
 
 sub onInputEnter {
 	my $self = shift;

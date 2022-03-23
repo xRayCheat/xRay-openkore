@@ -520,7 +520,7 @@ sub processAttack {
 					meetingSubRoute => 1,
 					LOSSubRoute => 1
 				);
-				
+
 				if (!$result) {
 					# Unable to calculate a route to target
 					$target->{$slave->{ai_attack_failed_timeout}} = time;

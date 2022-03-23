@@ -45,7 +45,7 @@ sub new {
 	my $self = $class->SUPER::new( @_ );
 
 	my $cryptKeys = $masterServer->{sendCryptKeys};
-	if ( $cryptKeys && $cryptKeys =~ /^(0x[0-9A-F]{8})\s*,\s*(0x[0-9A-F]{8})\s*,\s*(0x[0-9A-F]{8})$/ ) {
+	if ( $cryptKeys && $cryptKeys =~ /^(0x[0-9A-Fa-f]{8})\s*,\s*(0x[0-9A-Fa-f]{8})\s*,\s*(0x[0-9A-Fa-f]{8})$/ ) {
 		$self->cryptKeys( hex $1, hex $2, hex $3 );
 	}
 
@@ -3163,6 +3163,38 @@ sub sendCaptchaAnswer {
 
 		# Strangely, this packet has fixed length (dec 32, or hex 0x20) but has it padded into it - lututui
 		len => (exists $rpackets{'07E7'}{length}) ? $rpackets{'07E7'}{length} : 32,
+	}));
+}
+
+# 0A5A - PACKET_CZ_MACRO_DETECTOR_DOWNLOAD
+# Let Server know that we already downloaded Captcha Image
+sub sendMacroDetectorDownload {
+	my ($self) = @_;
+
+	$self->sendToServer($self->reconstruct({
+		switch => 'macro_detector_download',
+	}));
+}
+
+# 0A5C - PACKET_CZ_MACRO_DETECTOR_ANSWER
+# Send Captcha Answer
+sub sendMacroDetectorAnswer {
+	my ($self, $answer) = @_;
+
+	$self->sendToServer($self->reconstruct({
+		switch => 'macro_detector_answer',
+		answer => $answer,
+	}));
+}
+
+# 0A69 - PACKET_CZ_CAPTCHA_PREVIEW_REQUEST
+# Request to preview a captcha (privilege is required)
+sub sendCaptchaPreviewRequest {
+	my ($self, $captcha_key) = @_;
+
+	$self->sendToServer($self->reconstruct({
+		switch => 'captcha_preview_request',
+		captcha_key => $captcha_key,
 	}));
 }
 
