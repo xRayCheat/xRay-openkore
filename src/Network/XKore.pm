@@ -300,6 +300,7 @@ sub checkConnection {
 
 	if ($timeout{play}{time} && timeOut($timeout{play}) && $conState ==5) {
 		$self->setState(Network::NOT_CONNECTED);
+		Utils::Win32::playSound ('C:\Windows\Media\Windows Battery Low.wav');
 		error T("Timeout on Map Server, "), "connection";
 		Plugins::callHook('disconnected');
 		if ($config{dcOnDisconnect}) {
