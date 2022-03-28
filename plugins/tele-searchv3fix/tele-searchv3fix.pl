@@ -170,26 +170,26 @@ sub onMsgstring {
 	my (undef, $args) = @_;
 	return if ($field->isCity);
 	#1924  Call Spirits	=> if stuck into loop call just go teleport By Poring
-	if (AI::inQueue("skill_use") || $args->{failType} == 1 && $config{XKore} eq 1) {		
-		if($args->{skillID} == 261){
-			AI::clear('skill_use');
-			warning ("skill_use in Queue : Cleared skillID ".$args->{skillID}."\n");
-			if (!Misc::useTeleport(1)) {
-				error ("Unable to teleport :: in Clear Method !\n");
-				return;
-			}
-		}
-	}
-	if ($args->{index} == 1 || $args->{index} == 1924 && $config{XKore} eq 1) {
-		warning ("Stuck in Teleport Window - Cleared Teleport\n");
-		Commands::run('warp cancel');
-		AI::clear('teleport');
-		#Force Teleport 
-		if (!Misc::useTeleport(1)) {
-			error ("Unable to tele-search cause we can't teleport!\n");
-			return;
-		}
-	}
+	#if (AI::inQueue("skill_use") || $args->{failType} == 1 && $config{XKore} eq 1) {		
+	#	if($args->{skillID} == 261){
+	#		AI::clear('skill_use');
+	#		warning ("skill_use in Queue : Cleared skillID ".$args->{skillID}."\n");
+	#		if (!Misc::useTeleport(1)) {
+	#			error ("Unable to teleport :: in Clear Method !\n");
+	#			return;
+	#		}
+	#	}
+	#}
+	#if ($args->{index} == 1 || $args->{index} == 1924 && $config{XKore} eq 1) {
+	#	warning ("Stuck in Teleport Window - Cleared Teleport\n");
+	#	Commands::run('warp cancel');
+	#	AI::clear('teleport');
+	#	#Force Teleport 
+	#	if (!Misc::useTeleport(1)) {
+	#		error ("Unable to tele-search cause we can't teleport!\n");
+	#		return;
+	#	}
+	#}
 }
 
 1;
