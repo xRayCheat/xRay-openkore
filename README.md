@@ -1,4 +1,11 @@
 ![logo](https://upload.wikimedia.org/wikipedia/commons/b/b5/Kore_2g_logo.png)
+## Xrays Bypass GGH Youtube 
+https://youtu.be/TrSZAnrq-iw
+
+## Discord contact us
+VampireBlood#7097
+
+
 
 ![Language](https://img.shields.io/badge/language-Perl-blue.svg)
 
