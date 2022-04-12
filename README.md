@@ -1,12 +1,18 @@
-![logo](https://upload.wikimedia.org/wikipedia/commons/b/b5/Kore_2g_logo.png)
-## Xrays Bypass GGH Youtube 
-https://youtu.be/TrSZAnrq-iw
+
+## Xrays Bypass GGH Youtube  Watch it!
+
+[![Watch xRays Bypass](https://img.youtube.com/vi/TrSZAnrq-iw/maxresdefault.jpg)](https://youtu.be/TrSZAnrq-iw)
 
 ## Discord contact us
 VampireBlood#7097
 
 
 
+
+
+
+
+![logo](https://upload.wikimedia.org/wikipedia/commons/b/b5/Kore_2g_logo.png)
 ![Language](https://img.shields.io/badge/language-Perl-blue.svg)
 
 ![Stars](https://img.shields.io/github/stars/OpenKore/openkore)
